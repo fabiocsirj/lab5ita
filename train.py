@@ -4,7 +4,7 @@ from sklearn.neural_network import MLPClassifier
 import pickle
 
 Xtrain = np.loadtxt("Xtraining.csv", delimiter=",")
-# Xtrain = Xtrain.astype(int)
+Xtrain = Xtrain.astype(int)
 print(Xtrain)
 print(Xtrain.shape)
 ytrain = np.loadtxt("ytraining.csv", delimiter=",")

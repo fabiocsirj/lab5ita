@@ -28,22 +28,28 @@ def get_images(folder, maximages=None, rng=None):
         
     return [ image_features(os.path.join(folder, file)) for file in files ]
 
-# fire_dir = "Training/Fire/"
-# no_fire_dir = "Training/No_Fire/"
-# X_file_save = "Xtraining.csv"
-# y_file_save = "ytraining.csv"
-fire_dir = "Test/Fire/"
-no_fire_dir = "Test/No_Fire/"
-X_file_save = "Xtest.csv"
-y_file_save = "ytest.csv"
+def get(dir):
+    fire_dir    = "{}/Fire/".format(dir)
+    no_fire_dir = "{}/No_Fire/".format(dir)
+    Xfire = get_images(fire_dir)
+    Xno   = get_images(no_fire_dir)
 
-Xfire = get_images(fire_dir)
-Xno = get_images(no_fire_dir)
+    y = [ True for i in range(len(Xfire)) ] + [ False for i in range(len(Xno)) ]
 
-y = [ True for i in range(len(Xfire)) ] + [ False for i in range(len(Xno)) ]
+    X = np.concatenate([Xfire, Xno])
+    y = np.array(y)
 
-X = np.concatenate([Xfire, Xno])
-y = np.array(y)
+    return (X, y)
 
-np.savetxt(X_file_save, X, fmt="%d", delimiter=",")
-np.savetxt(y_file_save, y, fmt="%d", delimiter=",")
+def save(X, y, file):
+    X_file_save = "X{}.csv".format(file)
+    y_file_save = "y{}.csv".format(file)
+    np.savetxt(X_file_save, X, fmt="%d", delimiter=",")
+    np.savetxt(y_file_save, y, fmt="%d", delimiter=",")
+
+
+(X, y) = get("Training")
+save(X, y, "training")
+
+(X, y) = get("Test")
+save(X, y, "test")
